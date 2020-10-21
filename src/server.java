@@ -1,9 +1,8 @@
+import java.sql.Connection;
 
-public class server {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+class server {
+	public static void main(String args[]) throws Exception {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		Connection conn = database.getConnection();
 	}
-
 }
