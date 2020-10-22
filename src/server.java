@@ -68,11 +68,13 @@ class server {
 							String d_id = doctors.getString("id");
 							String d_fname = doctors.getString("fname");
 							String d_lname = doctors.getString("lname");
+							String d_domain = doctors.getString("domain");
 
 							JSONObject doctor = new JSONObject();
 							doctor.put("id", d_id);
 							doctor.put("fname", d_fname);
 							doctor.put("lname", d_lname);
+							doctor.put("domain", d_domain);
 							doctors_details.put(doctor);
 						}
 
@@ -80,7 +82,33 @@ class server {
 						byte[] sendData2 = doctors_details.toString().getBytes();
 						DatagramPacket d_sendPacket = new DatagramPacket(sendData2, sendData2.length, IPAddress, port);
 						serverSocket.send(d_sendPacket);
+						break;
 
+					case "add_checkup":
+						JSONArray checkup_data = data_json.getJSONArray("data");
+						JSONObject checkup_details_json = new JSONObject(checkup_data.get(0).toString());
+
+						String c_date = checkup_details_json.getString("date");
+						String c_patientId = checkup_details_json.getString("patientid");
+						String c_doctorId = checkup_details_json.getString("doctorid");
+						String c_diagnosis = checkup_details_json.getString("diagnosis");
+						String c_reason = checkup_details_json.getString("reason");
+
+						String query3 = "Insert into checkup (date,patientid,doctorid,diagnosis,reason,status) values(?,?,?,?,?,?)";
+						PreparedStatement preparedStmt3 = conn.prepareStatement(query3);
+						preparedStmt3.setString(1, c_date);
+						preparedStmt3.setString(2, c_patientId);
+						preparedStmt3.setString(3, c_doctorId);
+						preparedStmt3.setString(4, c_diagnosis);
+						preparedStmt3.setString(5, c_reason);
+						preparedStmt3.setString(6, "Incomplete");
+						preparedStmt3.executeUpdate();
+
+						System.out.println("Checkup details saved!");
+
+						byte[] sendData3 = "Checkup saved successfully!".getBytes();
+						DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length, IPAddress, port);
+						serverSocket.send(c_sendPacket);
 						break;
 
 					default:
