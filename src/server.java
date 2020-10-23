@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -148,6 +147,56 @@ class server {
 						byte[] sendData4 = doctor_checkups_details.toString().getBytes();
 						DatagramPacket cd_sendPacket = new DatagramPacket(sendData4, sendData4.length, IPAddress, port);
 						serverSocket.send(cd_sendPacket);
+						break;
+
+					case "update_checkup":
+						JSONArray u_checkup_data = data_json.getJSONArray("data");
+						JSONObject u_checkup_data_json = new JSONObject(u_checkup_data.get(0).toString());
+						String query5 = "";
+						String uc_diagnosis = "";
+						String uc_status = "";
+						String uc_patientid = u_checkup_data_json.getString("patientid");
+						String uc_date = u_checkup_data_json.getString("date");
+
+						try {
+							uc_diagnosis = u_checkup_data_json.getString("diagnosis");
+						} catch (Exception e) {
+						}
+						try {
+							uc_status = u_checkup_data_json.getString("status");
+						} catch (Exception e) {
+
+						}
+						PreparedStatement p5 = null;
+
+						if (uc_diagnosis.length() > 0 && uc_status.length() > 0) {
+							query5 = "Update checkup set status = ? , diagnosis = ? where date = ? and patientid = ?";
+							p5 = conn.prepareStatement(query5);
+							p5.setString(1, uc_status);
+							p5.setString(2, uc_diagnosis);
+							p5.setString(3, uc_date);
+							p5.setString(4, uc_patientid);
+						} else if (uc_status.length() > 0) {
+							query5 = "Update checkup set status = ? where date = ? and patientid = ?";
+							p5 = conn.prepareStatement(query5);
+							p5.setString(1, uc_status);
+							p5.setString(2, uc_date);
+							p5.setString(3, uc_patientid);
+						} else if (uc_diagnosis.length() > 0) {
+							query5 = "Update checkup set diagnosis = ? where date = ? and patientid = ?";
+							p5 = conn.prepareStatement(query5);
+							p5.setString(1, uc_diagnosis);
+							p5.setString(2, uc_date);
+							p5.setString(3, uc_patientid);
+						}
+
+						p5.executeUpdate();
+
+						System.out.println("Checkup details updated!");
+
+						byte[] sendData5 = "Checkup saved successfully!".getBytes();
+						DatagramPacket uc_sendPacket = new DatagramPacket(sendData5, sendData5.length, IPAddress, port);
+						serverSocket.send(uc_sendPacket);
 						break;
 
 					default:
