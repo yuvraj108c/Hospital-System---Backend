@@ -111,6 +111,45 @@ class server {
 						serverSocket.send(c_sendPacket);
 						break;
 
+					case "get_checkups_of_doctor":
+						JSONArray doctor_data = data_json.getJSONArray("data");
+						JSONObject doctor_data_json = new JSONObject(doctor_data.get(0).toString());
+						String doctor_id = doctor_data_json.getString("doctorid");
+
+						String query4 = "Select c.*,p.* from checkup c, patient p where c.doctorid = ? and p.id = c.patientid and c.status LIKE 'incomplete'";
+						PreparedStatement preparedStmt4 = conn.prepareStatement(query4);
+						preparedStmt4.setString(1, doctor_id);
+
+						ResultSet doctor_checkups = preparedStmt4.executeQuery();
+						JSONArray doctor_checkups_details = new JSONArray();
+
+						while (doctor_checkups.next()) {
+							String cd_patient_id = doctor_checkups.getString("patientid");
+							String cd_doctor_id = doctor_checkups.getString("doctorid");
+							String cd_status = doctor_checkups.getString("status");
+							String cd_reason = doctor_checkups.getString("reason");
+							String cd_diagnosis = doctor_checkups.getString("fname");
+							String cd_date = doctor_checkups.getString("date");
+							String cd_patient_name = doctor_checkups.getString("fname") + " "
+									+ doctor_checkups.getString("lname");
+
+							JSONObject checkup = new JSONObject();
+							checkup.put("patient_id", cd_patient_id);
+							checkup.put("patient_name", cd_patient_name);
+							checkup.put("doctor_id", cd_doctor_id);
+							checkup.put("status", cd_status);
+							checkup.put("reason", cd_reason);
+							checkup.put("diagnosis", cd_diagnosis);
+							checkup.put("date", cd_date);
+							doctor_checkups_details.put(checkup);
+						}
+
+						// System.out.println(doctor_checkups_details.toString());
+						byte[] sendData4 = doctor_checkups_details.toString().getBytes();
+						DatagramPacket cd_sendPacket = new DatagramPacket(sendData4, sendData4.length, IPAddress, port);
+						serverSocket.send(cd_sendPacket);
+						break;
+
 					default:
 						byte[] sendData_d = "Invalid action!".getBytes();
 						DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress,
