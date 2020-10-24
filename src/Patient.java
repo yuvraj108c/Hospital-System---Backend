@@ -39,4 +39,18 @@ public class Patient {
 
         return patients_details.toString();
     }
+
+    public static boolean createPatient(String fname, String lname, String phone, String address, String dob,
+            String gender) throws SQLException {
+        String query = "Insert into patient (fname,lname,phone,address,dob,gender) values(?,?,?,?,?,?)";
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setString(1, fname);
+        preparedStmt.setString(2, lname);
+        preparedStmt.setString(3, phone);
+        preparedStmt.setString(4, address);
+        preparedStmt.setString(5, dob);
+        preparedStmt.setString(6, gender);
+
+        return preparedStmt.executeUpdate() == 1;
+    }
 }

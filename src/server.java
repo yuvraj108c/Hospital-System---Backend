@@ -47,19 +47,16 @@ class server {
 						String p_DOB = patient_details_json.getString("DOB");
 						String p_gender = patient_details_json.getString("gender");
 
-						String query1 = "Insert into patient (fname,lname,phoneNumber,address,DOB,gender) values(?,?,?,?,?,?)";
-						PreparedStatement preparedStmt = conn.prepareStatement(query1);
-						preparedStmt.setString(1, p_fname);
-						preparedStmt.setString(2, p_lname);
-						preparedStmt.setString(3, p_phoneNumber);
-						preparedStmt.setString(4, p_address);
-						preparedStmt.setString(5, p_DOB);
-						preparedStmt.setString(6, p_gender);
-						preparedStmt.executeUpdate();
+						boolean success = Patient.createPatient(p_fname, p_lname, p_phoneNumber, p_address, p_DOB,
+								p_gender);
 
-						System.out.println("Patient details saved!");
+						String p_msg = "Error in saving patient!";
+						if (success) {
+							p_msg = "Patient details saved successfully!";
+						}
+						System.out.println(p_msg);
 
-						byte[] sendData1 = "Patient details saved successfully!".getBytes();
+						byte[] sendData1 = p_msg.getBytes();
 						DatagramPacket p_sendPacket = new DatagramPacket(sendData1, sendData1.length, IPAddress, port);
 						serverSocket.send(p_sendPacket);
 						break;
