@@ -108,7 +108,6 @@ class server {
 					case "update_checkup":
 						JSONArray u_checkup_data = data_json.getJSONArray("data");
 						JSONObject u_checkup_data_json = new JSONObject(u_checkup_data.get(0).toString());
-						String query5 = "";
 						String uc_diagnosis = "";
 						String uc_status = "";
 						String uc_checkupid = u_checkup_data_json.getString("checkupid");
@@ -138,6 +137,17 @@ class server {
 						DatagramPacket uc_sendPacket = new DatagramPacket(sendData5, sendData5.length, IPAddress, port);
 						serverSocket.send(uc_sendPacket);
 						break;
+
+					case "get_patients_for_specialtreatment":
+						JSONArray st_data = data_json.getJSONArray("data");
+						JSONObject st_data_json = new JSONObject(st_data.get(0).toString());
+						String dept_id = st_data_json.getString("dept_id");
+
+						byte[] st_senddata = SpecialTreatment.getPatientsForSpecialTreatment(Integer.parseInt(dept_id))
+								.getBytes();
+						DatagramPacket st_sendpacket = new DatagramPacket(st_senddata, st_senddata.length, IPAddress,
+								port);
+						serverSocket.send(st_sendpacket);
 
 					default:
 						byte[] sendData_d = "Invalid action!".getBytes();
