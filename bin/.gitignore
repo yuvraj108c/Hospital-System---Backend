@@ -2,3 +2,5 @@
 /client.class
 /Database.class
 /Patient.class
+/Doctor.class
+/Checkup.class

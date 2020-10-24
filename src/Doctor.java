@@ -3,13 +3,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Doctor {
     static Connection conn = Database.getConnection();
 
     public static String getAllDoctors() throws SQLException, JSONException {
         JSONArray doctors_details = new JSONArray();
 
-        String query = "select doctor.*, department.id as deptid, department.name as deptname from doctor,department where doctor.departmentid = deparment.id";
+        String query = "select doctor.*, department.id as deptid, department.name as deptname from doctor,department where doctor.departmentid = department.id";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         ResultSet doctors = preparedStmt.executeQuery();
 

@@ -18,12 +18,12 @@ class server {
 
 		while (true) {
 
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			serverSocket.receive(receivePacket);
+			InetAddress IPAddress = receivePacket.getAddress();
+			int port = receivePacket.getPort();
 			try {
-				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-				serverSocket.receive(receivePacket);
 				String client_data = new String(receivePacket.getData());
-				InetAddress IPAddress = receivePacket.getAddress();
-				int port = receivePacket.getPort();
 
 				JSONObject data_json = new JSONObject(client_data);
 				String action = data_json.getString("action");
@@ -76,8 +76,8 @@ class server {
 						String c_diagnosis = checkup_details_json.getString("diagnosis");
 						String c_reason = checkup_details_json.getString("reason");
 
-						boolean c_success = Checkup.createCheckup(c_patientid, c_doctorid, c_reason, c_diagnosis,
-								c_datecreated);
+						boolean c_success = Checkup.createCheckup(Integer.parseInt(c_patientid),
+								Integer.parseInt(c_doctorid), c_reason, c_diagnosis, c_datecreated);
 
 						String c_msg = "Error in saving checkup!";
 
@@ -186,13 +186,16 @@ class server {
 						DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress,
 								port);
 						serverSocket.send(sendPacket_default);
-						System.out.println(IPAddress);
+
 						break;
 				}
 
 			} catch (Exception e) {
 				System.err.println("Got an exception!");
 				System.err.println(e.getMessage());
+				byte[] sendData_d = e.getMessage().getBytes();
+				DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress, port);
+				serverSocket.send(sendPacket_default);
 			}
 
 		}
