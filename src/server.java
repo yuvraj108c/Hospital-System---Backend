@@ -188,6 +188,31 @@ class server {
 
 						break;
 
+					case "update_specialtreatment":
+						JSONArray uspt = data_json.getJSONArray("data");
+						JSONObject uspt_json = new JSONObject(uspt.get(0).toString());
+						String uspt_id = uspt_json.getString("specialtreatment_id");
+						String uspt_specialistid = uspt_json.getString("specialist_id");
+						String uspt_giventreatment = uspt_json.getString("given_treatment");
+						String uspt_status = uspt_json.getString("status");
+
+						boolean uspt_success = SpecialTreatment.updateSpecialTreatment(Integer.parseInt(uspt_id),
+								uspt_giventreatment, Integer.parseInt(uspt_specialistid), uspt_status);
+
+						String uspt_msg = "Error in updating special treatment!";
+
+						if (uc_success) {
+							uspt_msg = "Special Treatment updated successfully";
+						}
+
+						System.out.println(uspt_msg);
+
+						byte[] upst_sendData = uspt_msg.getBytes();
+						DatagramPacket upst_sendPacket = new DatagramPacket(upst_sendData, upst_sendData.length,
+								IPAddress, port);
+						serverSocket.send(upst_sendPacket);
+						break;
+
 					default:
 						byte[] sendData_d = "Invalid action!".getBytes();
 						DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress,

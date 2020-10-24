@@ -80,4 +80,16 @@ public class SpecialTreatment {
         return preparedStmt.executeUpdate() == 1;
     }
 
+    public static boolean updateSpecialTreatment(int specialtreatment_id, String givenTreatment, int specialist_id,
+            String status) throws SQLException {
+        String query = "Update specialtreatment set giventreatment = ?, specialistid = ? status = ? where id = ?";
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setString(1, givenTreatment);
+        preparedStmt.setInt(2, specialist_id);
+        preparedStmt.setString(3, status);
+        preparedStmt.setInt(4, specialtreatment_id);
+
+        return preparedStmt.executeUpdate() == 1;
+    }
+
 }
