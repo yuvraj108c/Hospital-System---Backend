@@ -175,10 +175,10 @@ class server {
 						serverSocket.send(spt_sendPacket);
 						break;
 
-					case "add_special_treatment":
+					case "get_checkup_of_specialtreatment":
 						JSONArray spt2 = data_json.getJSONArray("data");
 						JSONObject spt2_json = new JSONObject(spt2.get(0).toString());
-						String spt2_id = spt_data_json.getString("specialtreatment_id");
+						String spt2_id = spt2_json.getString("specialtreatment_id");
 
 						byte[] spt2_senddata = SpecialTreatment.getCheckupForSpecialTreatment(Integer.parseInt(spt2_id))
 								.getBytes();

@@ -47,7 +47,7 @@ public class SpecialTreatment {
     public static String getCheckupForSpecialTreatment(int specialtreatment_id) throws SQLException, JSONException {
         JSONArray st_details = new JSONArray();
 
-        String query = "select st.id as specialtreatment_id, c.patientid as patientid, c.date as checkup_date, c.diagnosis from specialtreatment st, checkup c, where st.checkupid = c.id and st.id = ?";
+        String query = "select st.id as specialtreatment_id, c.patientid as patientid, c.date as checkup_date, c.diagnosis from specialtreatment st, checkup c where st.checkupid = c.id and st.id = ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setInt(1, specialtreatment_id);
         ResultSet st = preparedStmt.executeQuery();
