@@ -3,10 +3,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Patient {
     static Connection conn = Database.getConnection();
 
-    public static String getAllPatients() throws SQLException {
+    public static String getAllPatients() throws SQLException, JSONException {
         JSONArray patients_details = new JSONArray();
 
         String query = "select * from patient";

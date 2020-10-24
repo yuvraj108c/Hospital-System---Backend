@@ -29,6 +29,13 @@ class server {
 				String action = data_json.getString("action");
 
 				switch (action) {
+					case "get_all_patients":
+						byte[] allPatientsData = Patient.getAllPatients().getBytes();
+						DatagramPacket allPatientsDataPacket = new DatagramPacket(allPatientsData,
+								allPatientsData.length, IPAddress, port);
+						serverSocket.send(allPatientsDataPacket);
+						break;
+
 					case "add_patient":
 						JSONArray patient_data = data_json.getJSONArray("data");
 						JSONObject patient_details_json = new JSONObject(patient_data.get(0).toString());
