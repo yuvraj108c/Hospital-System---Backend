@@ -7,24 +7,32 @@ public class Patient {
     static Connection conn = Database.getConnection();
 
     public static String getAllPatients() throws SQLException {
+        JSONArray patients_details = new JSONArray();
+
         String query = "select * from patient";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         ResultSet patients = preparedStmt.executeQuery();
 
         while (patients.next()) {
-            String d_id = patients.getString("id");
-            String d_fname = patients.getString("fname");
-            String d_lname = patients.getString("lname");
-            String d_domain = patients.getString("domain");
+            String id = patients.getString("id");
+            String fname = patients.getString("fname");
+            String lname = patients.getString("lname");
+            String phone = patients.getString("phone");
+            String address = patients.getString("address");
+            String dob = patients.getString("dob");
+            String gender = patients.getString("gender");
 
-            // JSONObject doctor = new JSONObject();
-            // doctor.put("id", d_id);
-            // doctor.put("fname", d_fname);
-            // doctor.put("lname", d_lname);
-            // doctor.put("domain", d_domain);
-            // doctors_details.put(doctor);
+            JSONObject patient = new JSONObject();
+            patient.put("id", id);
+            patient.put("fname", fname);
+            patient.put("lname", lname);
+            patient.put("phone", phone);
+            patient.put("address", address);
+            patient.put("dob", dob);
+            patient.put("gender", gender);
+            patients_details.put(patient);
         }
 
-        return "";
+        return patients_details.toString();
     }
 }
