@@ -1,16 +1,12 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 class server {
 	public static void main(String args[]) throws Exception {
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		Connection conn = Database.getConnection();
 
 		DatagramSocket serverSocket = new DatagramSocket(81);
 		byte[] receiveData = new byte[1024];
