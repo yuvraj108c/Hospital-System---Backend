@@ -175,6 +175,19 @@ class server {
 						serverSocket.send(spt_sendPacket);
 						break;
 
+					case "add_special_treatment":
+						JSONArray spt2 = data_json.getJSONArray("data");
+						JSONObject spt2_json = new JSONObject(spt2.get(0).toString());
+						String spt2_id = spt_data_json.getString("specialtreatment_id");
+
+						byte[] spt2_senddata = SpecialTreatment.getCheckupForSpecialTreatment(Integer.parseInt(spt2_id))
+								.getBytes();
+						DatagramPacket spt2_sendpacket = new DatagramPacket(spt2_senddata, spt2_senddata.length,
+								IPAddress, port);
+						serverSocket.send(spt2_sendpacket);
+
+						break;
+
 					default:
 						byte[] sendData_d = "Invalid action!".getBytes();
 						DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress,
