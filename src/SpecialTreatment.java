@@ -13,7 +13,7 @@ public class SpecialTreatment {
     public static String getPatientsForSpecialTreatment(int dept_id, String status) throws SQLException, JSONException {
         JSONArray st_details = new JSONArray();
 
-        String query = "select st.id as stid p.*,st.* from specialtreatment st, checkup c, patient p where st.checkupid = c.id and c.patientid = p.id and st.departmentid = ? and st.date >= CURDATE() and st.status LIKE ?";
+        String query = "select st.id as stid ,p.*,st.* from specialtreatment st, checkup c, patient p where st.checkupid = c.id and c.patientid = p.id and st.departmentid = ? and st.date >= CURDATE() and st.status LIKE ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setInt(1, dept_id);
         preparedStmt.setString(2, status);

@@ -149,6 +149,7 @@ class server {
 						DatagramPacket st_sendpacket = new DatagramPacket(st_senddata, st_senddata.length, IPAddress,
 								port);
 						serverSocket.send(st_sendpacket);
+						break;
 
 					case "add_special_treatment":
 						JSONArray spt_data = data_json.getJSONArray("data");
