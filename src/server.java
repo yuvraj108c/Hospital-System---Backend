@@ -42,13 +42,12 @@ class server {
 
 						String p_fname = patient_details_json.getString("fname");
 						String p_lname = patient_details_json.getString("lname");
-						String p_phoneNumber = patient_details_json.getString("phoneNumber");
+						String p_phone = patient_details_json.getString("phone");
 						String p_address = patient_details_json.getString("address");
-						String p_DOB = patient_details_json.getString("DOB");
+						String p_dob = patient_details_json.getString("dob");
 						String p_gender = patient_details_json.getString("gender");
 
-						boolean success = Patient.createPatient(p_fname, p_lname, p_phoneNumber, p_address, p_DOB,
-								p_gender);
+						boolean success = Patient.createPatient(p_fname, p_lname, p_phone, p_address, p_dob, p_gender);
 
 						String p_msg = "Error in saving patient!";
 						if (success) {
