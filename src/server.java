@@ -138,9 +138,10 @@ class server {
 						JSONArray st_data = data_json.getJSONArray("data");
 						JSONObject st_data_json = new JSONObject(st_data.get(0).toString());
 						String dept_id = st_data_json.getString("dept_id");
+						String st_status = st_data_json.getString("status");
 
-						byte[] st_senddata = SpecialTreatment.getPatientsForSpecialTreatment(Integer.parseInt(dept_id))
-								.getBytes();
+						byte[] st_senddata = SpecialTreatment
+								.getPatientsForSpecialTreatment(Integer.parseInt(dept_id), st_status).getBytes();
 						DatagramPacket st_sendpacket = new DatagramPacket(st_senddata, st_senddata.length, IPAddress,
 								port);
 						serverSocket.send(st_sendpacket);

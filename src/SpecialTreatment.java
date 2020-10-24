@@ -10,12 +10,13 @@ import org.json.JSONObject;
 public class SpecialTreatment {
     static Connection conn = Database.getConnection();
 
-    public static String getPatientsForSpecialTreatment(int dept_id) throws SQLException, JSONException {
+    public static String getPatientsForSpecialTreatment(int dept_id, String status) throws SQLException, JSONException {
         JSONArray st_details = new JSONArray();
 
-        String query = "select c.*,p.*,st.* from specialtreatment st, checkup c, patient p where st.checkupid = c.id and c.patientid = p.id and st.departmentid = ?";
+        String query = "select c.*,p.*,st.* from specialtreatment st, checkup c, patient p where st.checkupid = c.id and c.patientid = p.id and st.departmentid = ? and st.date >= CURDATE() and st.status LIKE ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setInt(1, dept_id);
+        preparedStmt.setString(2, status);
         ResultSet st = preparedStmt.executeQuery();
 
         while (st.next()) {
@@ -28,7 +29,7 @@ public class SpecialTreatment {
             String gender = st.getString("gender");
 
             JSONObject patient = new JSONObject();
-            patient.put("id", id);
+            patient.put("patient_id", id);
             patient.put("fname", fname);
             patient.put("lname", lname);
             patient.put("phone", phone);
