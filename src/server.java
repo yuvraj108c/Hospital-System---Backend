@@ -70,14 +70,14 @@ class server {
 						JSONArray checkup_data = data_json.getJSONArray("data");
 						JSONObject checkup_details_json = new JSONObject(checkup_data.get(0).toString());
 
-						String c_datecreated = checkup_details_json.getString("datecreated");
+						String c_date = checkup_details_json.getString("date");
 						String c_patientid = checkup_details_json.getString("patientid");
 						String c_doctorid = checkup_details_json.getString("doctorid");
 						String c_diagnosis = checkup_details_json.getString("diagnosis");
 						String c_reason = checkup_details_json.getString("reason");
 
 						boolean c_success = Checkup.createCheckup(Integer.parseInt(c_patientid),
-								Integer.parseInt(c_doctorid), c_reason, c_diagnosis, c_datecreated);
+								Integer.parseInt(c_doctorid), c_reason, c_diagnosis, c_date);
 
 						String c_msg = "Error in saving checkup!";
 
@@ -96,8 +96,9 @@ class server {
 						JSONArray doctor_data = data_json.getJSONArray("data");
 						JSONObject doctor_data_json = new JSONObject(doctor_data.get(0).toString());
 						String doctor_id = doctor_data_json.getString("doctorid");
+						String checkup_status = doctor_data_json.getString("status");
 
-						String checkups = Checkup.getCheckups("Incomplete", Integer.parseInt(doctor_id));
+						String checkups = Checkup.getCheckups(checkup_status, Integer.parseInt(doctor_id));
 
 						byte[] sendData4 = checkups.toString().getBytes();
 						DatagramPacket cd_sendPacket = new DatagramPacket(sendData4, sendData4.length, IPAddress, port);
