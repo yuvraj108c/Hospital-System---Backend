@@ -10,7 +10,7 @@ import org.json.JSONObject;
 public class Checkup {
     static Connection conn = Database.getConnection();
 
-    public static boolean createCheckup(Integer patientid, Integer doctorid, String reason, String diagnosis,
+    public static boolean createCheckup(Integer checkupid, Integer doctorid, String reason, String diagnosis,
             String date) throws SQLException {
         String query = "Insert into checkup(patientid,doctorid,reason,diagnosis,status,date) values(?,?,?,?,?,?)";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
@@ -70,5 +70,31 @@ public class Checkup {
             checkup_details.put(checkup);
         }
         return checkup_details.toString();
+    }
+
+    public static boolean updateCheckup(int checkupid, String diagnosis, String status) throws SQLException {
+        PreparedStatement p5 = null;
+        String query = "";
+
+        if (diagnosis.length() > 0 && status.length() > 0) {
+            query = "Update checkup set status = ? , diagnosis = ? where id = ?";
+            p5 = conn.prepareStatement(query);
+            p5.setString(1, status);
+            p5.setString(2, diagnosis);
+            p5.setInt(3, checkupid);
+        } else if (status.length() > 0) {
+            query = "Update checkup set status = ? where id = ?";
+            p5 = conn.prepareStatement(query);
+            p5.setString(1, status);
+            p5.setInt(2, checkupid);
+        } else if (diagnosis.length() > 0) {
+            query = "Update checkup set diagnosis = ? where id = ?";
+            p5 = conn.prepareStatement(query);
+            p5.setString(1, diagnosis);
+            p5.setInt(2, checkupid);
+        }
+
+        return p5.executeUpdate() == 1;
+
     }
 }
