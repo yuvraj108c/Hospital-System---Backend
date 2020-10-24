@@ -10,11 +10,12 @@ import org.json.JSONObject;
 public class Doctor {
     static Connection conn = Database.getConnection();
 
-    public static String getAllDoctors() throws SQLException, JSONException {
+    public static String getAllDoctors(int dept_id) throws SQLException, JSONException {
         JSONArray doctors_details = new JSONArray();
 
-        String query = "select doctor.*, department.id as deptid, department.name as deptname from doctor,department where doctor.departmentid = department.id";
+        String query = "select doctor.*, department.id as deptid, department.name as deptname from doctor,department where doctor.departmentid = department.id and department.id = ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setInt(1, dept_id);
         ResultSet doctors = preparedStmt.executeQuery();
 
         while (doctors.next()) {

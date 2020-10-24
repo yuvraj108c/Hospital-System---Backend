@@ -57,7 +57,11 @@ class server {
 						break;
 
 					case "get_all_doctors":
-						byte[] sendData2 = Doctor.getAllDoctors().getBytes();
+						JSONArray doctor_data1 = data_json.getJSONArray("data");
+						JSONObject doctor_data1_json = new JSONObject(doctor_data1.get(0).toString());
+
+						String department_id = doctor_data1_json.getString("departmentid");
+						byte[] sendData2 = Doctor.getAllDoctors(Integer.parseInt(department_id)).getBytes();
 						DatagramPacket d_sendPacket = new DatagramPacket(sendData2, sendData2.length, IPAddress, port);
 						serverSocket.send(d_sendPacket);
 						break;
@@ -148,18 +152,18 @@ class server {
 
 					case "add_special_treatment":
 						JSONArray spt_data = data_json.getJSONArray("data");
-						JSONObject spt_data_json = new JSONObject(patient_data.get(0).toString());
+						JSONObject spt_data_json = new JSONObject(spt_data.get(0).toString());
 
 						String spt_checkupid = spt_data_json.getString("checkupid");
-						String spt_specialistid = spt_data_json.getString("specialistid");
+						// String spt_specialistid = spt_data_json.getString("specialistid");
 						String spt_date = spt_data_json.getString("date");
 						String spt_departmentid = spt_data_json.getString("departmentid");
 
 						boolean spt_success = SpecialTreatment.createSpecialTreatment(Integer.parseInt(spt_checkupid),
-								Integer.parseInt(spt_specialistid), spt_date, Integer.parseInt(spt_departmentid));
+								spt_date, Integer.parseInt(spt_departmentid));
 
 						String spt_msg = "Error in saving Special Treatment!";
-						if (success) {
+						if (spt_success) {
 							spt_msg = "Special Treatment saved successfully!";
 						}
 						System.out.println(spt_msg);
