@@ -201,7 +201,7 @@ class server {
 
 						String uspt_msg = "Error in updating special treatment!";
 
-						if (uc_success) {
+						if (uspt_success) {
 							uspt_msg = "Special Treatment updated successfully";
 						}
 

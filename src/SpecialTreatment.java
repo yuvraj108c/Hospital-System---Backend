@@ -82,7 +82,7 @@ public class SpecialTreatment {
 
     public static boolean updateSpecialTreatment(int specialtreatment_id, String givenTreatment, int specialist_id,
             String status) throws SQLException {
-        String query = "Update specialtreatment set giventreatment = ?, specialistid = ? status = ? where id = ?";
+        String query = "Update specialtreatment set giventreatment = ?, specialistid = ? ,status = ? where id = ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setString(1, givenTreatment);
         preparedStmt.setInt(2, specialist_id);
