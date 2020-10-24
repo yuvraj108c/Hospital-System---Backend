@@ -60,28 +60,8 @@ class server {
 						serverSocket.send(p_sendPacket);
 						break;
 
-					case "get_doctors":
-						String query2 = "Select * from doctor";
-						PreparedStatement p2 = conn.prepareStatement(query2);
-						ResultSet doctors = p2.executeQuery();
-						JSONArray doctors_details = new JSONArray();
-
-						while (doctors.next()) {
-							String d_id = doctors.getString("id");
-							String d_fname = doctors.getString("fname");
-							String d_lname = doctors.getString("lname");
-							String d_domain = doctors.getString("domain");
-
-							JSONObject doctor = new JSONObject();
-							doctor.put("id", d_id);
-							doctor.put("fname", d_fname);
-							doctor.put("lname", d_lname);
-							doctor.put("domain", d_domain);
-							doctors_details.put(doctor);
-						}
-
-						// System.out.println(doctors_details.toString());
-						byte[] sendData2 = doctors_details.toString().getBytes();
+					case "get_all_doctors":
+						byte[] sendData2 = Doctor.getAllDoctors().getBytes();
 						DatagramPacket d_sendPacket = new DatagramPacket(sendData2, sendData2.length, IPAddress, port);
 						serverSocket.send(d_sendPacket);
 						break;
