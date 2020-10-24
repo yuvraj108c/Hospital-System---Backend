@@ -70,25 +70,24 @@ class server {
 						JSONArray checkup_data = data_json.getJSONArray("data");
 						JSONObject checkup_details_json = new JSONObject(checkup_data.get(0).toString());
 
-						String c_date = checkup_details_json.getString("date");
-						String c_patientId = checkup_details_json.getString("patientid");
-						String c_doctorId = checkup_details_json.getString("doctorid");
+						String c_datecreated = checkup_details_json.getString("datecreated");
+						String c_patientid = checkup_details_json.getString("patientid");
+						String c_doctorid = checkup_details_json.getString("doctorid");
 						String c_diagnosis = checkup_details_json.getString("diagnosis");
 						String c_reason = checkup_details_json.getString("reason");
 
-						String query3 = "Insert into checkup (date,patientid,doctorid,diagnosis,reason,status) values(?,?,?,?,?,?)";
-						PreparedStatement preparedStmt3 = conn.prepareStatement(query3);
-						preparedStmt3.setString(1, c_date);
-						preparedStmt3.setString(2, c_patientId);
-						preparedStmt3.setString(3, c_doctorId);
-						preparedStmt3.setString(4, c_diagnosis);
-						preparedStmt3.setString(5, c_reason);
-						preparedStmt3.setString(6, "Incomplete");
-						preparedStmt3.executeUpdate();
+						boolean c_success = Checkup.createCheckup(c_patientid, c_doctorid, c_reason, c_diagnosis,
+								c_datecreated);
 
-						System.out.println("Checkup details saved!");
+						String c_msg = "Error in saving checkup!";
 
-						byte[] sendData3 = "Checkup saved successfully!".getBytes();
+						if (c_success) {
+							c_msg = "Checkup saved successfully!";
+						}
+
+						System.out.println(c_msg);
+
+						byte[] sendData3 = c_msg.getBytes();
 						DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length, IPAddress, port);
 						serverSocket.send(c_sendPacket);
 						break;
