@@ -146,6 +146,30 @@ class server {
 								port);
 						serverSocket.send(st_sendpacket);
 
+					case "add_special_treatment":
+						JSONArray spt_data = data_json.getJSONArray("data");
+						JSONObject spt_data_json = new JSONObject(patient_data.get(0).toString());
+
+						String spt_checkupid = spt_data_json.getString("checkupid");
+						String spt_specialistid = spt_data_json.getString("specialistid");
+						String spt_date = spt_data_json.getString("date");
+						String spt_departmentid = spt_data_json.getString("departmentid");
+
+						boolean spt_success = SpecialTreatment.createSpecialTreatment(Integer.parseInt(spt_checkupid),
+								Integer.parseInt(spt_specialistid), spt_date, Integer.parseInt(spt_departmentid));
+
+						String spt_msg = "Error in saving Special Treatment!";
+						if (success) {
+							spt_msg = "Special Treatment saved successfully!";
+						}
+						System.out.println(spt_msg);
+
+						byte[] spt_sendData = spt_msg.getBytes();
+						DatagramPacket spt_sendPacket = new DatagramPacket(spt_sendData, spt_sendData.length, IPAddress,
+								port);
+						serverSocket.send(spt_sendPacket);
+						break;
+
 					default:
 						byte[] sendData_d = "Invalid action!".getBytes();
 						DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress,

@@ -42,4 +42,17 @@ public class SpecialTreatment {
         return st_details.toString();
     }
 
+    public static boolean createSpecialTreatment(int checkupid, int specialistid, String date, int departmentid)
+            throws SQLException {
+        String query = "Insert into specialtreatment (checkupid,specialistid,date,status,departmentid) values(?,?,?,?,?)";
+        PreparedStatement preparedStmt = conn.prepareStatement(query);
+        preparedStmt.setInt(1, checkupid);
+        preparedStmt.setInt(2, specialistid);
+        preparedStmt.setString(3, date);
+        preparedStmt.setString(4, "Incomplete");
+        preparedStmt.setInt(5, departmentid);
+
+        return preparedStmt.executeUpdate() == 1;
+    }
+
 }
