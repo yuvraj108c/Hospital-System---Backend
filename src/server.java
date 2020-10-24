@@ -97,7 +97,7 @@ class server {
 						JSONObject doctor_data_json = new JSONObject(doctor_data.get(0).toString());
 						String doctor_id = doctor_data_json.getString("doctorid");
 
-						String checkups = Checkup.getValidCheckups("Incomplete", Integer.parseInt(doctor_id));
+						String checkups = Checkup.getCheckups("Incomplete", Integer.parseInt(doctor_id));
 
 						byte[] sendData4 = checkups.toString().getBytes();
 						DatagramPacket cd_sendPacket = new DatagramPacket(sendData4, sendData4.length, IPAddress, port);

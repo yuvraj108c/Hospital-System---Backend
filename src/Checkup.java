@@ -19,7 +19,7 @@ public class Checkup {
         return preparedStmt.executeUpdate() == 1;
     }
 
-    public static String getValidCheckups(String status, int doctorid) throws SQLException {
+    public static String getCheckups(String status, int doctorid) throws SQLException {
         String query = "select c.*,p.id as pid , p.fname as pfname,p.lname as plname, p.phone as pphone, p.gender as pgender,d.id as did, d.fname as dfname, d.lname as dfname, d.gender as dgender, d.domain as ddomain,d.phone as dphone  from checkup c, patient p, doctor d where c.patientid = p.id and c.doctorid = d.id and datecreated >= CURDATE() and status LIKE ? and c.doctorid = ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setString(1, status);
