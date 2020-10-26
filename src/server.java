@@ -73,11 +73,10 @@ class server {
 						String c_date = checkup_details_json.getString("date");
 						String c_patientid = checkup_details_json.getString("patientid");
 						String c_doctorid = checkup_details_json.getString("doctorid");
-						String c_diagnosis = checkup_details_json.getString("diagnosis");
 						String c_reason = checkup_details_json.getString("reason");
 
 						boolean c_success = Checkup.createCheckup(Integer.parseInt(c_patientid),
-								Integer.parseInt(c_doctorid), c_reason, c_diagnosis, c_date);
+								Integer.parseInt(c_doctorid), c_reason, c_date);
 
 						String c_msg = "Error in saving checkup!";
 

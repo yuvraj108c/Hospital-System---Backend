@@ -10,8 +10,8 @@ import org.json.JSONObject;
 public class Checkup {
     static Connection conn = Database.getConnection();
 
-    public static boolean createCheckup(Integer checkupid, Integer doctorid, String reason, String diagnosis,
-            String date) throws SQLException {
+    public static boolean createCheckup(Integer checkupid, Integer doctorid, String reason, String date)
+            throws SQLException {
         String query = "Insert into checkup(patientid,doctorid,reason,diagnosis,status,date) values(?,?,?,?,?,?)";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setInt(1, 1);
