@@ -10,12 +10,12 @@ import org.json.JSONObject;
 public class Checkup {
     static Connection conn = Database.getConnection();
 
-    public static boolean createCheckup(Integer checkupid, Integer doctorid, String reason, String date)
+    public static boolean createCheckup(Integer patientId, Integer doctorid, String reason, String date)
             throws SQLException {
         String query = "Insert into checkup(patientid,doctorid,reason,diagnosis,status,date) values(?,?,?,?,?,?)";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
-        preparedStmt.setInt(1, 1);
-        preparedStmt.setInt(2, 1);
+        preparedStmt.setInt(1, patientId);
+        preparedStmt.setInt(2, doctorid);
         preparedStmt.setString(3, reason);
         preparedStmt.setString(4, "");
         preparedStmt.setString(5, "Incomplete");
