@@ -45,6 +45,14 @@ class server {
 						DatagramPacket allPatientsDataPacket = new DatagramPacket(allPatientsData,
 								allPatientsData.length, IPAddress, port);
 						serverSocket.send(allPatientsDataPacket);
+
+						// TODO: send all patients to receptionist
+						System.out.println("Must send to " + clients.get("General Doctor"));
+						byte[] rt_sendpatients = Patient.getAllPatients().getBytes();
+						DatagramPacket rt_sendpatientspacket = new DatagramPacket(rt_sendpatients,
+								rt_sendpatients.length,
+								InetAddress.getByName("41.223.78.68"), 82);
+						serverSocket.send(rt_sendpatientspacket);
 						break;
 
 					case "add_patient":
@@ -106,12 +114,6 @@ class server {
 						DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length, IPAddress, port);
 						serverSocket.send(c_sendPacket);
 
-						// TODO: send all patients to receptionist
-						byte[] rt_sendpatients = Patient.getAllPatients().getBytes();
-						DatagramPacket rt_sendpatientspacket = new DatagramPacket(rt_sendpatients,
-								rt_sendpatients.length,
-								InetAddress.getByName(clients.get("General Doctor").replace("/", "")), port);
-						serverSocket.send(rt_sendpatientspacket);
 						break;
 
 					case "get_checkups_of_doctor":
