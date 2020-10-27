@@ -1,6 +1,8 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.HashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -11,6 +13,8 @@ class server {
 		DatagramSocket serverSocket = new DatagramSocket(81);
 		byte[] receiveData = new byte[1024];
 		System.out.println("Server ready and waiting for clients to connect...");
+
+		HashMap<String, String> clients = new HashMap<String, String>();
 
 		while (true) {
 
@@ -25,6 +29,17 @@ class server {
 				String action = data_json.getString("action");
 
 				switch (action) {
+					case "identify_client":
+						JSONArray device_data = data_json.getJSONArray("data");
+						JSONObject device_data_json = new JSONObject(device_data.get(0).toString());
+
+						String device_name = device_data_json.getString("device_name");
+
+						clients.put(device_name, IPAddress.toString());
+						System.out.println(device_name + " joined with ip address: " + IPAddress.toString());
+
+						break;
+
 					case "get_all_patients":
 						byte[] allPatientsData = Patient.getAllPatients().getBytes();
 						DatagramPacket allPatientsDataPacket = new DatagramPacket(allPatientsData,
@@ -54,6 +69,7 @@ class server {
 						byte[] sendData1 = p_msg.getBytes();
 						DatagramPacket p_sendPacket = new DatagramPacket(sendData1, sendData1.length, IPAddress, port);
 						serverSocket.send(p_sendPacket);
+
 						break;
 
 					case "get_all_doctors":
@@ -89,6 +105,13 @@ class server {
 						byte[] sendData3 = c_msg.getBytes();
 						DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length, IPAddress, port);
 						serverSocket.send(c_sendPacket);
+
+						// TODO: send all patients to receptionist
+						byte[] rt_sendpatients = Patient.getAllPatients().getBytes();
+						DatagramPacket rt_sendpatientspacket = new DatagramPacket(rt_sendpatients,
+								rt_sendpatients.length,
+								InetAddress.getByName(clients.get("General Doctor").replace("/", "")), port);
+						serverSocket.send(rt_sendpatientspacket);
 						break;
 
 					case "get_checkups_of_doctor":
