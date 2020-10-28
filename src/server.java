@@ -36,9 +36,11 @@ class server {
 						String email = login_data_json.getString("email").trim();
 						String password = login_data_json.getString("password").trim();
 
-						boolean valid_user = User.login(email, password);
+						System.out.println(email + " " + password);
 
-						byte[] loginData = valid_user ? "true".getBytes() : "false".getBytes();
+						String department = User.login(email, password);
+
+						byte[] loginData = department.length() > 0 ? department.getBytes() : "false".getBytes();
 						DatagramPacket loginDataPacket = new DatagramPacket(loginData, loginData.length, IPAddress,
 								port);
 						serverSocket.send(loginDataPacket);

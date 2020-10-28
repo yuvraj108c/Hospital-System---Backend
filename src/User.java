@@ -24,9 +24,9 @@ public class User {
         return null;
     }
 
-    public static boolean login(String email, String password) throws SQLException {
-    	
-        String query = "select * from users where email = ? and password = ?";
+    public static String login(String email, String password) throws SQLException, JSONException {
+
+        String query = "select users.*,department.name as dname from users,department where email = ? and password = ? and department.id = users.departmentid";
 
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setString(1, email);
@@ -34,7 +34,11 @@ public class User {
 
         ResultSet rs = preparedStmt.executeQuery();
 
-        return rs.next() ? true : false;
+        if (rs.next()) {
+            return rs.getString("dname");
+        }
+
+        return "";
     }
 
     public static String getAllDoctors(int dept_id) throws SQLException, JSONException {
@@ -72,9 +76,4 @@ public class User {
         return doctors_details.toString();
     }
 
-    
-
 }
-
-
-
