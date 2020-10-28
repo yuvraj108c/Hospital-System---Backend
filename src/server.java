@@ -29,6 +29,22 @@ class server {
 				String action = data_json.getString("action");
 
 				switch (action) {
+					case "login":
+						JSONArray login_data = data_json.getJSONArray("data");
+						JSONObject login_data_json = new JSONObject(login_data.get(0).toString());
+
+						String email = login_data_json.getString("email").trim();
+						String password = login_data_json.getString("password").trim();
+
+						boolean valid_user = User.login(email, password);
+
+						byte[] loginData = valid_user ? "true".getBytes() : "false".getBytes();
+						DatagramPacket loginDataPacket = new DatagramPacket(loginData, loginData.length, IPAddress,
+								port);
+						serverSocket.send(loginDataPacket);
+
+						break;
+
 					case "identify_client":
 						JSONArray device_data = data_json.getJSONArray("data");
 						JSONObject device_data_json = new JSONObject(device_data.get(0).toString());
@@ -46,13 +62,6 @@ class server {
 								allPatientsData.length, IPAddress, port);
 						serverSocket.send(allPatientsDataPacket);
 
-						// TODO: send all patients to receptionist
-						System.out.println("Must send to " + clients.get("General Doctor"));
-						byte[] rt_sendpatients = Patient.getAllPatients().getBytes();
-						DatagramPacket rt_sendpatientspacket = new DatagramPacket(rt_sendpatients,
-								rt_sendpatients.length,
-								InetAddress.getByName("41.223.78.68"), 82);
-						serverSocket.send(rt_sendpatientspacket);
 						break;
 
 					case "add_patient":
@@ -85,7 +94,7 @@ class server {
 						JSONObject doctor_data1_json = new JSONObject(doctor_data1.get(0).toString());
 
 						String department_id = doctor_data1_json.getString("departmentid");
-						byte[] sendData2 = Doctor.getAllDoctors(Integer.parseInt(department_id)).getBytes();
+						byte[] sendData2 = User.getAllDoctors(Integer.parseInt(department_id)).getBytes();
 						DatagramPacket d_sendPacket = new DatagramPacket(sendData2, sendData2.length, IPAddress, port);
 						serverSocket.send(d_sendPacket);
 						break;
@@ -113,6 +122,13 @@ class server {
 						byte[] sendData3 = c_msg.getBytes();
 						DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length, IPAddress, port);
 						serverSocket.send(c_sendPacket);
+
+						// TODO: send all data to general doctor
+						byte[] rt_sendpatients = "success".getBytes();
+						DatagramPacket rt_sendpatientspacket = new DatagramPacket(rt_sendpatients,
+								rt_sendpatients.length,
+								InetAddress.getByName(clients.get("General Doctor").replace("/", "")), 82);
+						serverSocket.send(rt_sendpatientspacket);
 
 						break;
 
@@ -197,6 +213,12 @@ class server {
 						DatagramPacket spt_sendPacket = new DatagramPacket(spt_sendData, spt_sendData.length, IPAddress,
 								port);
 						serverSocket.send(spt_sendPacket);
+
+						// TODO: send data to ent
+						byte[] as_sendData = "success".getBytes();
+						DatagramPacket as_sendDatapacket = new DatagramPacket(as_sendData, as_sendData.length,
+								InetAddress.getByName(clients.get("ENT").replace("/", "")), 83);
+						serverSocket.send(as_sendDatapacket);
 						break;
 
 					case "get_checkup_of_specialtreatment":

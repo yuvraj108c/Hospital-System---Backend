@@ -25,7 +25,7 @@ public class Checkup {
     }
 
     public static String getCheckups(String status, int doctorid) throws SQLException, JSONException {
-        String query = "select c.*,p.id as pid , p.fname as pfname,p.lname as plname, p.phone as pphone, p.gender as pgender,d.id as did, d.fname as dfname, d.lname as dlname, d.gender as dgender, d.domain as ddomain,d.phone as dphone  from checkup c, patient p, doctor d where c.patientid = p.id and c.doctorid = d.id and date >= CURDATE() and status LIKE ? and c.doctorid = ?";
+        String query = "select c.*,p.id as pid , p.fname as pfname,p.lname as plname, p.phone as pphone, p.gender as pgender,d.id as did, d.fname as dfname, d.lname as dlname, d.gender as dgender,d.phone as dphone  from checkup c, patient p, users d where c.patientid = p.id and c.doctorid = d.id and d.departmentid = 2 and date >= CURDATE() and status LIKE ? and c.doctorid = ?";
         PreparedStatement preparedStmt = conn.prepareStatement(query);
         preparedStmt.setString(1, status);
         preparedStmt.setInt(2, doctorid);
@@ -44,7 +44,6 @@ public class Checkup {
             String dfname = checkups.getString("dfname");
             String dlname = checkups.getString("dlname");
             String dgender = checkups.getString("dgender");
-            String ddomain = checkups.getString("ddomain");
             String dphone = checkups.getString("dphone");
             String c_status = checkups.getString("status");
             String c_reason = checkups.getString("reason");
