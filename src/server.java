@@ -36,9 +36,9 @@ class server {
 						String email = login_data_json.getString("email").trim();
 						String password = login_data_json.getString("password").trim();
 
-						System.out.println(email + " " + password);
-
 						String department = User.login(email, password);
+
+						System.out.println(department);
 
 						byte[] loginData = department.length() > 0 ? department.getBytes() : "false".getBytes();
 						DatagramPacket loginDataPacket = new DatagramPacket(loginData, loginData.length, IPAddress,
@@ -85,9 +85,10 @@ class server {
 						}
 						System.out.println(p_msg);
 
-						byte[] sendData1 = p_msg.getBytes();
-						DatagramPacket p_sendPacket = new DatagramPacket(sendData1, sendData1.length, IPAddress, port);
-						serverSocket.send(p_sendPacket);
+						// byte[] sendData1 = p_msg.getBytes();
+						// DatagramPacket p_sendPacket = new DatagramPacket(sendData1, sendData1.length,
+						// IPAddress, port);
+						// serverSocket.send(p_sendPacket);
 
 						break;
 
@@ -121,11 +122,12 @@ class server {
 
 						System.out.println(c_msg);
 
-						byte[] sendData3 = c_msg.getBytes();
-						DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length, IPAddress, port);
-						serverSocket.send(c_sendPacket);
+						// byte[] sendData3 = c_msg.getBytes();
+						// DatagramPacket c_sendPacket = new DatagramPacket(sendData3, sendData3.length,
+						// IPAddress, port);
+						// serverSocket.send(c_sendPacket);
 
-						// TODO: send all data to general doctor
+						// Send checkups to general doctor
 						byte[] rt_sendpatients = "success".getBytes();
 						DatagramPacket rt_sendpatientspacket = new DatagramPacket(rt_sendpatients,
 								rt_sendpatients.length,
@@ -175,9 +177,10 @@ class server {
 
 						System.out.println(uc_msg);
 
-						byte[] sendData5 = uc_msg.getBytes();
-						DatagramPacket uc_sendPacket = new DatagramPacket(sendData5, sendData5.length, IPAddress, port);
-						serverSocket.send(uc_sendPacket);
+						// byte[] sendData5 = uc_msg.getBytes();
+						// DatagramPacket uc_sendPacket = new DatagramPacket(sendData5,
+						// sendData5.length, IPAddress, port);
+						// serverSocket.send(uc_sendPacket);
 						break;
 
 					case "get_patients_for_specialtreatment":
@@ -211,10 +214,11 @@ class server {
 						}
 						System.out.println(spt_msg);
 
-						byte[] spt_sendData = spt_msg.getBytes();
-						DatagramPacket spt_sendPacket = new DatagramPacket(spt_sendData, spt_sendData.length, IPAddress,
-								port);
-						serverSocket.send(spt_sendPacket);
+						// byte[] spt_sendData = spt_msg.getBytes();
+						// DatagramPacket spt_sendPacket = new DatagramPacket(spt_sendData,
+						// spt_sendData.length, IPAddress,
+						// port);
+						// serverSocket.send(spt_sendPacket);
 
 						// TODO: send data to ent
 						byte[] as_sendData = "success".getBytes();
@@ -255,10 +259,11 @@ class server {
 
 						System.out.println(uspt_msg);
 
-						byte[] upst_sendData = uspt_msg.getBytes();
-						DatagramPacket upst_sendPacket = new DatagramPacket(upst_sendData, upst_sendData.length,
-								IPAddress, port);
-						serverSocket.send(upst_sendPacket);
+						// byte[] upst_sendData = uspt_msg.getBytes();
+						// DatagramPacket upst_sendPacket = new DatagramPacket(upst_sendData,
+						// upst_sendData.length,
+						// IPAddress, port);
+						// serverSocket.send(upst_sendPacket);
 						break;
 
 					default:
@@ -273,9 +278,10 @@ class server {
 			} catch (Exception e) {
 				System.err.println("Got an exception!");
 				System.err.println(e.getMessage());
-				byte[] sendData_d = e.getMessage().getBytes();
-				DatagramPacket sendPacket_default = new DatagramPacket(sendData_d, sendData_d.length, IPAddress, port);
-				serverSocket.send(sendPacket_default);
+				// byte[] sendData_d = e.getMessage().getBytes();
+				// DatagramPacket sendPacket_default = new DatagramPacket(sendData_d,
+				// sendData_d.length, IPAddress, port);
+				// serverSocket.send(sendPacket_default);
 			}
 
 		}
